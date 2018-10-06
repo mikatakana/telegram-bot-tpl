@@ -1,0 +1,22 @@
+{
+  "name": "telegram-bot-tpl",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikatakana/telegram-bot-tpl.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikatakana/telegram-bot-tpl/issues"
+  },
+  "homepage": "https://github.com/mikatakana/telegram-bot-tpl#readme",
+  "dependencies": {
+    "node-telegram-bot-api": "git://github.com/datichto/node-telegram-bot-api.git#socks5-proxy"
+  }
+}
