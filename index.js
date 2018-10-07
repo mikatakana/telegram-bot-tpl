@@ -1,5 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api')
 
+const ROOT_COMMAND = '/'
+
 class Bot {
 
   constructor(token, commands, options = {}) {
@@ -9,6 +11,10 @@ class Bot {
       if (typeof commands[msg.text] === 'function') {
         const message = new Message(bot, msg)
         commands[msg.text](message)
+      
+      } else if (typeof commands[ROOT_COMMAND] === 'function') {
+        const message = new Message(bot, msg)
+        commands[ROOT_COMMAND](message)
       }
     })
 
@@ -39,12 +45,22 @@ class Bot {
 class Message {
 
   constructor(bot, msg, data = {}) {
-    this.bot = bot
-    this.msg = msg
-    this.data = data
+    this.bot   = bot
+    this.msg   = msg
+    this.text  = msg.text
+    this.data  = data
+    this.media = {}
+
+    const mediaTypes = ['document', 'photo', 'voice', 'audio']
+    
+    mediaTypes.forEach((mediaType) => {
+      if (msg[mediaType]) {
+        this.media[mediaType] = msg[mediaType]
+      }
+    })
   }
 
-  send(message, options = {}, on_reply = null) {
+  send(message, options = {}) {
     let editMessageId = options.edit
 
     if (Object.keys(options).length > 0) {
@@ -97,10 +113,10 @@ class Message {
     
     } else {
       return this.bot.sendMessage(this.msg.chat.id, message, options).then((msg) => {
-        if (typeof on_reply === 'function') {
+        if (typeof options.on_reply === 'function') {
           const id = this.bot.onReplyToMessage(msg.chat.id, msg.message_id, (replyMessage) => {
             const message = new Message(this.bot, replyMessage, {})
-            on_reply(message)
+            options.on_reply(message)
 
             this.bot.removeReplyListener(id)
           })
