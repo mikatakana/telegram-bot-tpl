@@ -62,6 +62,7 @@ class Message {
 
   send(message, options = {}) {
     let editMessageId = options.edit
+    const onReply = options.on_reply
 
     if (Object.keys(options).length > 0) {
       let markup = {}
@@ -113,10 +114,10 @@ class Message {
     
     } else {
       return this.bot.sendMessage(this.msg.chat.id, message, options).then((msg) => {
-        if (typeof options.on_reply === 'function') {
+        if (typeof onReply === 'function') {
           const id = this.bot.onReplyToMessage(msg.chat.id, msg.message_id, (replyMessage) => {
             const message = new Message(this.bot, replyMessage, {})
-            options.on_reply(message)
+            onReply(message)
 
             this.bot.removeReplyListener(id)
           })
