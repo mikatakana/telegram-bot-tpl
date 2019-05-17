@@ -102,8 +102,11 @@ class Message {
         editMessageId = this.msg.message_id
       }
 
-      options = { 'reply_markup': markup, 'parse_mode': 'markdown' }
+      options = { 'reply_markup': markup }
     }
+
+    // Default parse mode
+    options.parse_mode = 'markdown'
 
     if (editMessageId) {
       Object.assign(options, { 'chat_id': this.msg.chat.id, 'message_id': editMessageId })
