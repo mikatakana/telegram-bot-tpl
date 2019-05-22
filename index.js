@@ -98,7 +98,7 @@ class Message {
         markup.force_reply = true
       }
 
-      if (options.target === 'self') {
+      if (options.target === 'self' && this.bot.token.startsWith(this.msg.from.id)) {
         editMessageId = this.msg.message_id
       }
 
@@ -129,6 +129,11 @@ class Message {
         return msg.message_id
       })
     }
+  }
+
+  self(message, options = {}) {
+    options.target = 'self'
+    return send(message, options)
   }
 
   button(text, data = {}) {
